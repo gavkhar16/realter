@@ -2,6 +2,7 @@ import styled, { css } from "styled-components";
 
 interface StyledButtonProps {
   isPrimary?: boolean;
+  type?: 'button' | 'submit' | 'reset'; // Добавляем тип
 }
 
 export const SButton = styled.button<StyledButtonProps>`
@@ -16,7 +17,7 @@ export const SButton = styled.button<StyledButtonProps>`
     props.isPrimary
       ? css`
           background-color: ${(props) => props.theme.colors.white};
-          color: white; /* Белый текст */
+          color: red; /* Черный текст для видимости */
         `
       : css`
           background-color: ${(props) => props.theme.colors.black};

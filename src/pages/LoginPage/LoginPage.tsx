@@ -4,6 +4,7 @@ import { Input } from "../../components/UI/Input/InputText";
 import { StyleLoginPage } from "./LogiPage.style";
 import { TextBackgroundBox } from "../../components/UI/TextBackgroundBox/TextBackgroundBox";
 import { Linktext } from "../../components/UI/Linktext/Linktext";
+import * as Yup from 'yup';
 
 export const LoginPage = () => {
   return (
@@ -11,7 +12,7 @@ export const LoginPage = () => {
       <TextBackgroundBox>
         <Heading headingText="Авторизация" headingType="h1" />
         <Input type="text" placeholder="Введите свою электронную почту" />
-        <Input type="password" placeholder="Введите свой пароль" />{" "}
+        <Input type="password" placeholder="Введите свой пароль" />
         <Linktext linkText="Забыли пароль?" />
         <Button buttonText="Войти" />
       </TextBackgroundBox>

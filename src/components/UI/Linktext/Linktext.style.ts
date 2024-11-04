@@ -1,21 +1,26 @@
 import styled from "styled-components";
 
-export const StyledLinktext=styled.div`
-
-  align-self: flex-end; 
+export const StyledLinktext = styled.div`
+  align-self: flex-end;
   margin-top: 10px;
-  text-decoration: none;
   margin-bottom: 20px;
-  
-  &:hover {
-    background-color: ${(props)=>props.theme.colors.white};
-  }
-a{
+  text-decoration: none;
+
+  a {
     cursor: pointer;
-    color:${(props)=>props.theme.colors.darkgray}; 
-}
-span{
-    color: ${(props)=>props.theme.colors.darkgray}; 
-}`
+    color: ${(props) => props.theme.colors.darkgray};
+    text-decoration: none;
 
+    &:hover {
+      color: ${(props) => props.theme.colors.darkgray}; /* Серый цвет при наведении */
+    }
+  }
 
+  span {
+    color: ${(props) => props.theme.colors.darkgray};
+
+    &:hover {
+      color: ${(props) => props.theme.colors.darkgray}; /* Серый цвет при наведении */
+    }
+  }
+`;

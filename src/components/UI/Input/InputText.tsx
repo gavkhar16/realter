@@ -1,15 +1,30 @@
-import { StyledInput } from "./Input.style";
+import { ErrorMessage } from "formik";
+import { StyledInput,  } from "./Input.style";
 
-interface InputProps {
-  type?: string;
-  placeholder?: string;
+interface IInput extends React.InputHTMLAttributes<HTMLInputElement> {
+  errorText?: string;
+  isError?: boolean;
   id?: string;
 }
 
-export const Input = ({ type, placeholder, id }: InputProps) => {
+export const Input = ({
+  type,
+  placeholder,
+  errorText,
+  isError,
+  id,
+  ...props
+}: IInput) => {
   return (
     <div>
-      <StyledInput type={type} placeholder={placeholder} id={id} />
+      <StyledInput
+        $isError={isError}
+        type={type}
+        placeholder={placeholder}
+        id={id}
+        {...props}
+      />
+      {isError && <ErrorMessage>{errorText} </ErrorMessage>}
     </div>
   );
 };

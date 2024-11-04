@@ -4,4 +4,5 @@ export const colors ={
     red: "#E11B22",
     blue: "#01003",
     darkgray: "#4E5754",
+    
 }
