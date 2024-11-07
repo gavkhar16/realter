@@ -1,7 +1,7 @@
 import styled, { css } from "styled-components";
 
 interface StyledInputProps {
-  $isError?: boolean; // Используйте знак доллара перед именем, если это необходимо для стилевого компонента
+  $isError?: boolean;
 }
 
 export const StyledInput = styled.input<StyledInputProps>`
@@ -9,7 +9,7 @@ export const StyledInput = styled.input<StyledInputProps>`
   border: 1px solid #ccc;
   border-radius: 5px;
   margin-bottom: 15px;
-  width: 300px; /* Ширина поля ввода */
+  width: 300px;
   font-size: 1rem;
 
   ${(props) =>
@@ -20,6 +20,12 @@ export const StyledInput = styled.input<StyledInputProps>`
     `}
 
   &::placeholder {
-    color: #aaa; 
+    color: #aaa;
   }
+`;
+
+export const ErrorText = styled.div`
+  color: ${(props) => props.theme.colors.red};
+  font-size: 0.875rem;
+  margin-top: 5px;
 `;

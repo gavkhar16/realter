@@ -1,5 +1,5 @@
-import { ErrorMessage } from "formik";
-import { StyledInput,  } from "./Input.style";
+import React from "react";
+import { StyledInput, ErrorText } from "./Input.style";
 
 interface IInput extends React.InputHTMLAttributes<HTMLInputElement> {
   errorText?: string;
@@ -24,7 +24,7 @@ export const Input = ({
         id={id}
         {...props}
       />
-      {isError && <ErrorMessage>{errorText} </ErrorMessage>}
+      {isError && <ErrorText>{errorText}</ErrorText>}
     </div>
   );
 };
