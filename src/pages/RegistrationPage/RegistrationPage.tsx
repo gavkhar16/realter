@@ -10,7 +10,8 @@ import { Button } from "../../components/UI/Button/ButtonBox";
 import { TextBackgroundBox } from "../../components/UI/TextBackgroundBox/TextBackgroundBox";
 import { Linktext } from "../../components/UI/Linktext/Linktext";
 import { useNavigate } from "react-router-dom";
-import { SubmitHandler, useForm } from "react-hook-form";
+import { Controller, SubmitHandler, useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
 
 interface IRegistrationPage {
   useremail: string;
@@ -41,7 +42,8 @@ export const RegistrationPage: React.FC = () => {
     control,
     handleSubmit,
     formState: { errors },
-  } = useForm({
+  } = useForm<IRegistrationPage>({
+    resolver: yupResolver(RegistrationScheme),
     defaultValues: {
       useremail: "",
       userphone: "",
@@ -65,21 +67,45 @@ export const RegistrationPage: React.FC = () => {
         <Heading headingText="Регистрация" isNightMode={isNightMode} />
 
 
-        <form onSubmit={handleSubmit(onRegistrationSubmit)}>
-          <Input
-            type="text"
-            placeholder="Электронная почта"
-            isNightMode={isNightMode}
+        <form onSubmit={handleSubmit(onRegistrationSubmit)} >
+          <Controller
+          name="useremail"
+          control={control}
+          render={({ field }) => (
+            <Input
+              type="text"
+              placeholder="Введите свою электронную почту"
+              errorText={errors.useremail?.message}
+              isError={!!errors.useremail}
+              {...field}
+            />
+          )}
+        />
+        <Controller
+            name="userphone"
+            control={control}
+            render={({ field }) => (
+              <Input
+                type="tel"
+                placeholder="Номер телефона"
+                errorText={errors.userphone?.message}
+                isError={!!errors.userphone}
+                {...field}
+              />
+            )}
           />
-          <Input
-            type="email"
-            placeholder="Введите номер телефона"
-            isNightMode={isNightMode}
-          />
-          <Input
-            type="password"
-            placeholder="Пароль"
-            isNightMode={isNightMode}
+          <Controller
+            name="userpassword"
+            control={control}
+            render={({ field }) => (
+              <Input
+                type="password"
+                placeholder="Введите свой пароль"
+                errorText={errors.userpassword?.message}
+                isError={!!errors.userpassword}
+                {...field}
+              />
+            )}
           />
           <Linktext
           linkText="Уже есть аккаунт"
