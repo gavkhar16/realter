@@ -1,14 +1,20 @@
-import React from 'react';
-import { SButton } from './Button.style'; 
-interface ButtonProps {
+import React from "react";
+import { SButton } from "./Button.style";
+
+interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   buttonText: string;
   isPrimary?: boolean;
-  type?: 'button' | 'submit' | 'reset'; 
+  isNightMode?: boolean;
 }
 
-export const Button: React.FC<ButtonProps> = ({ buttonText, isPrimary, type = 'button' }) => {
+export const Button = ({
+  buttonText,
+  isPrimary,
+  isNightMode,
+  ...props
+}: ButtonProps) => {
   return (
-    <SButton isPrimary={isPrimary} type={type}>
+    <SButton $isPrimary={isPrimary} $isNightMode={isNightMode} {...props}>
       {buttonText}
     </SButton>
   );

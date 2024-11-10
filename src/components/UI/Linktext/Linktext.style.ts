@@ -1,26 +1,49 @@
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 
-export const StyledLinktext = styled.div`
+interface StyledLinktextProps {
+  isNightMode?: boolean;
+}
+
+export const StyledLinktext = styled.div<StyledLinktextProps>`
   align-self: flex-end;
   margin-top: 10px;
   margin-bottom: 20px;
-  text-decoration: none;
+  text-align: right;
 
-  a {
-    cursor: pointer;
-    color: ${(props) => props.theme.colors.darkgray};
-    text-decoration: none;
+  ${({ isNightMode }) =>
+    isNightMode
+      ? css`
+          color: #f0f0f0; 
+          
+          a {
+            color: #b0b0b0;
+            &:hover {
+              color: #d0d0d0;
+            }
+          }
 
-    &:hover {
-      color: ${(props) => props.theme.colors.darkgray}; /* Серый цвет при наведении */
-    }
-  }
+          span {
+            color: #b0b0b0;
+            &:hover {
+              color: #d0d0d0;
+            }
+          }
+        `
+      : css`
+          color: #333333; 
 
-  span {
-    color: ${(props) => props.theme.colors.darkgray};
+          a {
+            color: ${(props) => props.theme.colors.darkgray};
+            &:hover {
+              color: ${(props) => props.theme.colors.gray};
+            }
+          }
 
-    &:hover {
-      color: ${(props) => props.theme.colors.darkgray}; /* Серый цвет при наведении */
-    }
-  }
+          span {
+            color: ${(props) => props.theme.colors.darkgray};
+            &:hover {
+              color: ${(props) => props.theme.colors.gray};
+            }
+          }
+        `}
 `;

@@ -1,30 +1,25 @@
-import React from "react";
-import { StyledInput, ErrorText } from "./Input.style";
+import React from 'react';
+import { StyledInput,  ErrorMeassage, } from './Input.style';
 
 interface IInput extends React.InputHTMLAttributes<HTMLInputElement> {
   errorText?: string;
   isError?: boolean;
-  id?: string;
+  isNightMode?: boolean;
 }
 
-export const Input = ({
-  type,
-  placeholder,
-  errorText,
-  isError,
-  id,
-  ...props
-}: IInput) => {
+export const Input: React.FC<IInput> = ({ type, placeholder, errorText, isError, isNightMode, ...props }) => {
   return (
     <div>
       <StyledInput
         $isError={isError}
         type={type}
         placeholder={placeholder}
-        id={id}
+        isNightMode={isNightMode}
         {...props}
       />
-      {isError && <ErrorText>{errorText}</ErrorText>}
+      {isError && <ErrorMeassage>{errorText}</ErrorMeassage>}
     </div>
   );
 };
+
+
