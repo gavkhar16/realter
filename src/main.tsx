@@ -1,4 +1,5 @@
 import React from 'react';
+import index from '../Index.css'
 import ReactDOM from 'react-dom/client';
 import { ThemeProvider } from 'styled-components';
 import App from './App';
