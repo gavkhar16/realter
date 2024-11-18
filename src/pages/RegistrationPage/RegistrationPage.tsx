@@ -53,7 +53,11 @@ export const RegistrationPage: React.FC = () => {
 
   const onRegistrationSubmit: SubmitHandler<IRegistrationPage> = (data) => {
     console.log("Регистрация завершена:", data);
-    navigate("/"); 
+
+    // Сохранение данных в localStorage
+    localStorage.setItem("userData", JSON.stringify(data));
+
+    navigate("/"); // Перенаправление на главную страницу
   };
 
   const toggleTheme = () => {
@@ -63,25 +67,22 @@ export const RegistrationPage: React.FC = () => {
   return (
     <StyleRegistrationPage isNightMode={isNightMode}>
       <TextBackgroundBox>
-       
         <Heading headingText="Регистрация" isNightMode={isNightMode} />
-
-
-        <form onSubmit={handleSubmit(onRegistrationSubmit)} >
+        <form onSubmit={handleSubmit(onRegistrationSubmit)}>
           <Controller
-          name="useremail"
-          control={control}
-          render={({ field }) => (
-            <Input
-              type="text"
-              placeholder="Введите свою электронную почту"
-              errorText={errors.useremail?.message}
-              isError={!!errors.useremail}
-              {...field}
-            />
-          )}
-        />
-        <Controller
+            name="useremail"
+            control={control}
+            render={({ field }) => (
+              <Input
+                type="text"
+                placeholder="Введите свою электронную почту"
+                errorText={errors.useremail?.message}
+                isError={!!errors.useremail}
+                {...field}
+              />
+            )}
+          />
+          <Controller
             name="userphone"
             control={control}
             render={({ field }) => (
@@ -108,18 +109,17 @@ export const RegistrationPage: React.FC = () => {
             )}
           />
           <Linktext
-          linkText="Уже есть аккаунт"
-          isNightMode={isNightMode}
-          onLinkClick={() => navigate("/")} 
-        />
+            linkText="Уже есть аккаунт"
+            isNightMode={isNightMode}
+            onLinkClick={() => navigate("/")} 
+          />
           <Button
-            buttonText="Авторизоватся"
+            buttonText="Зарегистрироваться"
             isNightMode={isNightMode}
             isPrimary
             type="submit"
           />
         </form>
-        
         <ThemeToggleButton onClick={toggleTheme}>
           {isNightMode
             ? "Переключить на дневной режим"

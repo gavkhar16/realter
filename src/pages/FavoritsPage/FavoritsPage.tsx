@@ -1,45 +1,32 @@
-import React, { useState } from "react";
-import { FavoritesContainer, FavoriteItem,
-    ThemeToggleButton } from "./FavoritsPage.style";
-import { Heading } from "../../components/UI/Heading/Heading";
-import { Button } from "../../components/UI/Button/ButtonBox";
-import { Linktext } from "../../components/UI/Linktext/Linktext";
+import React, { useContext } from 'react';
+import {
+  FavoritesContainer,
+  FavoritesList,
+  EmptyMessage,
+} from './FavoritsPage.style';
+import Heading from '../../components/UI/Heading/Heading';
 
-interface FavoriteProps {
-  id: number;
-  title: string;
-  image: string;
-}
-
-interface FavoritesPageProps {
-  favorites: FavoriteProps[];
-}
-
-export const FavoritesPage: React.FC<FavoritesPageProps> = ({ favorites }) => {
-  const [isNightMode, setIsNightMode] = useState(true);
-
-  const toggleTheme = () => {
-    setIsNightMode(!isNightMode);
-  };
+const FavoritesPage: React.FC = () => {
+  const favorites = JSON.parse(localStorage.getItem('favorites') || '[]');
 
   return (
-    <FavoritesContainer isNightMode={isNightMode}>
-      <Heading headingText="Избранное" isNightMode={isNightMode} />
-      {favorites.map((favorite) => (
-        <FavoriteItem key={favorite.id} isNightMode={isNightMode}>
-          <img src={favorite.image} alt={favorite.title} style={{ width: "50px", borderRadius: "4px" }} />
-          <p>{favorite.title}</p>
-          <Button buttonText="Удалить" isNightMode={isNightMode} />
-          <Linktext
-            linkText="Подробнее"
-            isNightMode={isNightMode}
-            onLinkClick={() => { /* navigate to details page */ }}
-          />
-        </FavoriteItem>
-      ))}
-      <ThemeToggleButton onClick={toggleTheme}>
-        {isNightMode ? "Переключить на дневной режим" : "Переключить на ночной режим"}
-      </ThemeToggleButton>
+    <FavoritesContainer>
+      <Heading headingType="h1" headingText="Избранное" />
+      <FavoritesList>
+        {favorites.length > 0 ? (
+          favorites.map((favorite: any, index: number) => (
+            <div key={index}>
+              <h3>{favorite.title}</h3>
+              <p>{favorite.price}</p>
+              <img src={favorite.image} alt={favorite.title} />
+            </div>
+          ))
+        ) : (
+          <EmptyMessage>✨ Вы пока ничего не добавили в избранное. ✨</EmptyMessage>
+        )}
+      </FavoritesList>
     </FavoritesContainer>
   );
 };
+
+export default FavoritesPage;

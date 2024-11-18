@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Button } from "../../components/UI/Button/ButtonBox";
 import * as yup from "yup";
 import { Heading } from "../../components/UI/Heading/Heading";
@@ -10,12 +10,10 @@ import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useNavigate } from "react-router-dom";
 
-
 interface ILoginForm {
   useremail: string;
   userpassword: string;
 }
-
 
 const loginFormScheme = yup.object({
   useremail: yup
@@ -30,6 +28,8 @@ const loginFormScheme = yup.object({
 
 export const LoginPage = () => {
   const navigate = useNavigate();
+  const [loginError, setLoginError] = useState<string | null>(null); // Для отображения ошибок
+
   const {
     control,
     handleSubmit,
@@ -43,8 +43,24 @@ export const LoginPage = () => {
   });
 
   const onLoginSubmit: SubmitHandler<ILoginForm> = (data) => {
-    console.log(data);
-    navigate("/main-page");
+    const storedUser = localStorage.getItem("userData");
+
+    if (storedUser) {
+      const parsedUser = JSON.parse(storedUser);
+
+      if (
+        parsedUser.useremail === data.useremail &&
+        parsedUser.userpassword === data.userpassword
+      ) {
+        setLoginError(null); // Сброс ошибки
+        console.log("Вход выполнен");
+        navigate("/main-page");
+      } else {
+        setLoginError("Неправильный email или пароль");
+      }
+    } else {
+      setLoginError("Такого аккаунта не существует. Зарегистрируйтесь.");
+    }
   };
 
   const handleLinkClick = () => {
@@ -82,7 +98,8 @@ export const LoginPage = () => {
               />
             )}
           />
-          <Linktext linkText="Забыли пароль?"  onLinkClick={handleLinkClick} />
+          {loginError && <p style={{ color: "red" }}>{loginError}</p>}
+          <Linktext linkText="Забыли пароль?" onLinkClick={handleLinkClick} />
           <Button buttonText="Войти" type="submit" isPrimary />
         </form>
       </TextBackgroundBox>

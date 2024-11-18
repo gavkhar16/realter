@@ -1,50 +1,49 @@
-import React, { useState } from "react";
-import {
-  CardPageContainer,
-  CardItem,
-  ThemeToggleButton,
-} from "./CardPage.style";
-import { Heading } from "../../components/UI/Heading/Heading";
-import { Button } from "../../components/UI/Button/ButtonBox";
-import { Linktext } from "../../components/UI/Linktext/Linktext";
+// src/pages/CardPage/CardPage.tsx
+import React from 'react';
+import { useParams } from 'react-router-dom';
+import { ListingCard } from '../../components/UI/ListingCard/ListingCard';
+import Heading from '../../components/UI/Heading/Heading';
+import { SCarsPage } from './CardPage.style'; 
 
-interface CardProps {
-  id: number;
-  title: string;
-  description: string;
-  image: string;
-}
+const listings = [
+  {
+    id: 1,
+    title: 'Роскошный пентхаус на Манхэттене',
+    price: '$3,000,000',
+    image: 'https://www.datocms-assets.com/121312/1710946359-53west53_gallery_28.jpg?auto=format%2Ccompress&fit=max&h=3000&w=2000',
+    address: '53 West 53rd St, New York, NY',
+    description: 'Роскошный пентхаус с уникальными видами на Манхэттен.',
+  },
+  {
+    id: 2,
+    title: 'Апартаменты с видом на Центральный парк',
+    price: '$2,200,000',
+    image: 'https://www.datocms-assets.com/121312/1710946399-53west53_gallery_30.jpg?auto=format%2Ccompress&fit=max&h=3000&w=2000',
+    address: 'Central Park West, New York, NY',
+    description: 'Апартаменты с панорамным видом на Центральный парк.',
+  },
+];
 
-interface CardPageProps {
-  cards: CardProps[];
-}
+const CardPage: React.FC = () => {
+  const { id } = useParams(); // Получаем id из URL
+  const property = listings.find((listing) => listing.id === Number(id)); // Преобразуем id в число
 
-export const CardPage: React.FC<CardPageProps> = ({ cards }) => {
-  const [isNightMode, setIsNightMode] = useState(true);
-
-  const toggleTheme = () => {
-    setIsNightMode(!isNightMode);
-  };
+  if (!property) {
+    return <div>Карточка не найдена</div>;
+  }
 
   return (
-    <CardPageContainer isNightMode={isNightMode}>
-      <Heading headingText="Карточки" isNightMode={isNightMode} />
-      {cards.map((card) => (
-        <CardItem key={card.id} isNightMode={isNightMode}>
-          <img src={card.image} alt={card.title} style={{ width: "100px" }} />
-          <h3>{card.title}</h3>
-          <p>{card.description}</p>
-          <Button buttonText="Подробнее" isNightMode={isNightMode} isPrimary />
-          <Linktext
-            linkText="Узнать больше"
-            isNightMode={isNightMode}
-            onLinkClick={() => { /* navigate to details page */ }}
-          />
-        </CardItem>
-      ))}
-      <ThemeToggleButton onClick={toggleTheme}>
-        {isNightMode ? "Переключить на дневной режим" : "Переключить на ночной режим"}
-      </ThemeToggleButton>
-    </CardPageContainer>
+    <SCarsPage>
+      <Heading headingText={property.title} headingType="h1" />
+      <ListingCard
+        title={property.title}
+        price={property.price}
+        image={property.image}
+        address={property.address}
+      />
+      <p>{property.description}</p>
+    </SCarsPage>
   );
 };
+
+export default CardPage;
