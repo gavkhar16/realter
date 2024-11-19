@@ -1,17 +1,21 @@
 import React, { useEffect, useState } from "react";
 import {
+  ListingsContainer,
   ListingCardContainer,
   ListingImage,
   ListingTitle,
   ListingPrice,
   LikeButton,
+  PhotoGallery,
+  ErrorText,
 } from "./ListingCard.style";
 
 interface Apartment {
-  title: string;
+  title?: string;
   price: string;
   location: { name: string };
-  coverPhoto: { url: string };
+  coverPhoto?: { url: string };
+  photoIDs?: number[];
   area: number;
   id: number;
 }
@@ -35,15 +39,20 @@ export const ListingCard: React.FC = () => {
     try {
       const response = await fetch(url, options);
       const data = await response.json();
-      if (response.ok) {
-        setApartments(data.hits || []); // Обновляем список квартир
-      } else {
-        throw new Error("Ошибка при загрузке данных");
-      }
+      const formattedData: Apartment[] = data.hits.map((item: any) => ({
+        title: item.title || "Заголовок отсутствует",
+        price: item.price || "Цена не указана",
+        location: item.location[0] || { name: "Не указано" },
+        coverPhoto: item.coverPhoto || null,
+        photoIDs: item.photoIDs || [],
+        area: item.area || 0,
+        id: item.id,
+      }));
+      setApartments(formattedData);
     } catch (error: any) {
-      setError(error.message); // Устанавливаем ошибку
+      setError(error.message);
     } finally {
-      setLoading(false); // Завершаем состояние загрузки
+      setLoading(false);
     }
   };
 
@@ -64,32 +73,38 @@ export const ListingCard: React.FC = () => {
   }
 
   return (
-    <>
-      {apartments.map((apartment) => {
+    <ListingsContainer>
+      {apartments.map((apartment: Apartment) => {
         const { title, price, location, coverPhoto, area, id } = apartment;
+        const imageUrl = coverPhoto?.url || "/path/to/placeholder/image.jpg";
 
         return (
           <ListingCardContainer key={id}>
-            {/* Отображение фото квартиры */}
-            {coverPhoto && coverPhoto.url ? (
-              <ListingImage src={coverPhoto.url} alt={title} />
-            ) : (
-              <p>Фото не доступно</p>
-            )}
+            <PhotoGallery>
+              <ListingImage
+                src={imageUrl}
+                alt={title || "Изображение недоступно"}
+                onError={(e) => {
+                  e.currentTarget.src = "/path/to/placeholder/image.jpg";
+                }}
+              />
+            </PhotoGallery>
 
-            {/* Детали квартиры */}
-            <ListingTitle>{title}</ListingTitle>
+            <ListingTitle>{title || "Заголовок отсутствует"}</ListingTitle>
             <ListingPrice>{price ? `${price} AED` : "Цена не указана"}</ListingPrice>
-            <p><strong>Местоположение:</strong> {location?.name || "Не указано"}</p>
-            <p><strong>Площадь:</strong> {area ? `${area} кв.м` : "Не указано"}</p>
+            <p>
+              <strong>Местоположение:</strong> {location?.name || "Не указано"}
+            </p>
+            <p>
+              <strong>Площадь:</strong> {area ? `${area} кв.м` : "Не указано"}
+            </p>
 
-            {/* Кнопка лайка */}
             <LikeButton onClick={() => alert(`Добавлено в избранное: ${title}`)}>
               Лайк
             </LikeButton>
           </ListingCardContainer>
         );
       })}
-    </>
+    </ListingsContainer>
   );
 };

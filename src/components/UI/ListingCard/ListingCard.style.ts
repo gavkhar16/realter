@@ -61,3 +61,20 @@ export const LikeButton = styled.button`
     background-color: #c73133; /* Цвет при нажатии */
   }
 `;
+export const PhotoGallery = styled.div`
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+`;
+
+export const Photo = styled.img`
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+  border-radius: 8px;
+`;
+
+export const ErrorText = styled.p`
+  color: red;
+  font-size: 12px;
+`;

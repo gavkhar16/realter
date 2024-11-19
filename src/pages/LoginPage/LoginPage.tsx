@@ -99,7 +99,7 @@ export const LoginPage = () => {
             )}
           />
           {loginError && <p style={{ color: "red" }}>{loginError}</p>}
-          <Linktext linkText="Забыли пароль?" onLinkClick={handleLinkClick} />
+          <Linktext linkText="Зарегистрироватся" onLinkClick={handleLinkClick} />
           <Button buttonText="Войти" type="submit" isPrimary />
         </form>
       </TextBackgroundBox>
