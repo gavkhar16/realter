@@ -6,52 +6,57 @@ import {
   ListingTitle,
   ListingPrice,
   LikeButton,
-  PhotoGallery,
   ErrorText,
+  PaginationContainer,
+  PaginationButton,
+  Loader,
 } from "./ListingCard.style";
 
 interface Apartment {
-  title?: string;
+  id: string;
+  title: string;
   price: string;
-  location: { name: string };
-  coverPhoto?: { url: string };
-  photoIDs?: number[];
-  area: number;
-  id: number;
+  coverPhoto?: { url: string; title?: string };
 }
 
 export const ListingCard: React.FC = () => {
   const [apartments, setApartments] = useState<Apartment[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const itemsPerPage = 5;
 
   const fetchApartmentData = async () => {
-    const url =
-      "https://bayut.p.rapidapi.com/properties/list?locationExternalIDs=5002%2C6020&purpose=for-rent&hitsPerPage=25&page=0&lang=en&sort=city-level-score&rentFrequency=monthly&categoryExternalID=4";
-    const options = {
-      method: "GET",
-      headers: {
-        "x-rapidapi-key": "b3f4229913msh1a673e0076f1bf5p1edb96jsndf258c684c9a",
-        "x-rapidapi-host": "bayut.p.rapidapi.com",
-      },
-    };
+    const url = 'https://bayut.p.rapidapi.com/auto-complete?query=abu%20dhabi&hitsPerPage=25&page=0&lang=en';
+const options = {
+	method: 'GET',
+	headers: {
+		'x-rapidapi-key': 'd4402c0024mshda7bbc52c603153p19062djsna8067e4643ff',
+		'x-rapidapi-host': 'bayut.p.rapidapi.com'
+	}
+};
 
     try {
+      setLoading(true);
       const response = await fetch(url, options);
       const data = await response.json();
-      const formattedData: Apartment[] = data.hits.map((item: any) => ({
-        title: item.title || "Заголовок отсутствует",
-        price: item.price || "Цена не указана",
-        location: item.location[0] || { name: "Не указано" },
-        coverPhoto: item.coverPhoto || null,
-        photoIDs: item.photoIDs || [],
-        area: item.area || 0,
-        id: item.id,
-      }));
-      setApartments(formattedData);
+
+      if (response.ok) {
+        // Проверка структуры ответа API
+        setApartments(
+          data.hits.map((hit: any) => ({
+            id: hit.id,
+            title: hit.title || "Название не указано",
+            price: hit.price || "Цена не указана",
+            coverPhoto: hit.coverPhoto || null,
+          }))
+        );
+        setLoading(false);
+      } else {
+        throw new Error("Ошибка при загрузке данных с API");
+      }
     } catch (error: any) {
-      setError(error.message);
-    } finally {
+      setError(error.message || "Произошла ошибка");
       setLoading(false);
     }
   };
@@ -60,51 +65,77 @@ export const ListingCard: React.FC = () => {
     fetchApartmentData();
   }, []);
 
+  const totalPages = Math.ceil(apartments.length / itemsPerPage);
+
+  const currentApartments = apartments.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
+  );
+
+  const handlePageChange = (page: number) => {
+    if (page > 0 && page <= totalPages) {
+      setCurrentPage(page);
+    }
+  };
+
   if (loading) {
-    return <p>Загрузка...</p>;
+    return (
+      <Loader>
+        <div className="loader"></div>
+      </Loader>
+    );
   }
 
   if (error) {
-    return <p>Ошибка: {error}</p>;
+    return <ErrorText>{error}</ErrorText>;
   }
 
   if (apartments.length === 0) {
-    return <p>Нет доступных квартир.</p>;
+    return <ErrorText>Нет доступных объектов недвижимости.</ErrorText>;
   }
 
   return (
-    <ListingsContainer>
-      {apartments.map((apartment: Apartment) => {
-        const { title, price, location, coverPhoto, area, id } = apartment;
-        const imageUrl = coverPhoto?.url || "/path/to/placeholder/image.jpg";
-
-        return (
-          <ListingCardContainer key={id}>
-            <PhotoGallery>
+    <>
+      <ListingsContainer>
+        {currentApartments.map((apartment) => (
+          <ListingCardContainer key={apartment.id}>
+            <ListingTitle>{apartment.title}</ListingTitle>
+            <ListingPrice>price: {apartment.price}</ListingPrice>
+            {apartment.coverPhoto ? (
               <ListingImage
-                src={imageUrl}
-                alt={title || "Изображение недоступно"}
-                onError={(e) => {
-                  e.currentTarget.src = "/path/to/placeholder/image.jpg";
-                }}
+                src={apartment.coverPhoto.url}
+                alt={apartment.coverPhoto.title || "Изображение"}
               />
-            </PhotoGallery>
-
-            <ListingTitle>{title || "Заголовок отсутствует"}</ListingTitle>
-            <ListingPrice>{price ? `${price} AED` : "Цена не указана"}</ListingPrice>
-            <p>
-              <strong>Местоположение:</strong> {location?.name || "Не указано"}
-            </p>
-            <p>
-              <strong>Площадь:</strong> {area ? `${area} кв.м` : "Не указано"}
-            </p>
-
-            <LikeButton onClick={() => alert(`Добавлено в избранное: ${title}`)}>
-              Лайк
-            </LikeButton>
+            ) : (
+              <ErrorText>Фото отсутствует</ErrorText>
+            )}
+            <LikeButton>♡ Добавить в избранное</LikeButton>
           </ListingCardContainer>
-        );
-      })}
-    </ListingsContainer>
+        ))}
+      </ListingsContainer>
+      <PaginationContainer>
+        <PaginationButton
+          onClick={() => handlePageChange(currentPage - 1)}
+          disabled={currentPage === 1}
+        >
+          Назад
+        </PaginationButton>
+        {Array.from({ length: totalPages }, (_, index) => (
+          <PaginationButton
+            key={index}
+            onClick={() => handlePageChange(index + 1)}
+            isActive={currentPage === index + 1}
+          >
+            {index + 1}
+          </PaginationButton>
+        ))}
+        <PaginationButton
+          onClick={() => handlePageChange(currentPage + 1)}
+          disabled={currentPage === totalPages}
+        >
+          Вперёд
+        </PaginationButton>
+      </PaginationContainer>
+    </>
   );
 };

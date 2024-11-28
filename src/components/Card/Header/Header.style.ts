@@ -6,19 +6,25 @@ export const StyleHeader = styled.header`
   top: 0;
   left: 0;
   z-index: 100;
-  padding: calc(1vw + 6.4px) calc(12vw - 35px); 
-  background-color: ${(props) => props.theme.colors.black};
-  color: ${(props) =>props.theme.colors.white };
+  padding: calc(1vw + 6.4px) calc(12vw - 35px);
+  background-color: ${({ theme }) => theme.colors.black};
+  color: ${({ theme }) => theme.colors.white};
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 
   display: flex;
   align-items: center;
   justify-content: space-between;
-  
-  
-  .logo{
-    font-size: 24px;
-    font-weight: bold;
+`;
+
+export const ThemeToggleButton = styled.button`
+  margin-right: 20px;
+  background: none;
+  border: none;
+  cursor: pointer;
+
+  img {
+    width: 24px;
+    height: 24px;
   }
 `;
 
@@ -60,18 +66,6 @@ export const SearchBaro = styled.div`
     border: 1px solid ${({ theme }) => theme.border};
     border-left: none;
     border-radius: 0 4px 4px 0;
-  }
-`;
-
-export const ThemeToggleButton = styled.button`
-  margin-right: 20px;
-  background: none;
-  border: none;
-  cursor: pointer;
-
-  img {
-    width: 24px;
-    height: 24px;
   }
 `;
 

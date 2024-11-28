@@ -3,7 +3,7 @@ export const colors ={
     black: "#1A1816",
     red: "#F80000",
     blue: "#01003",
-    darkgray: "#293133",
+    darkgray: "#293133", 
     gray: "#7D7F7D",
     background: '#2C3E50',  // Темно-синий/серый фон (ночное небо)
     primary: '#ECF0F1',      // Светлый цвет для текста (серый/белый)

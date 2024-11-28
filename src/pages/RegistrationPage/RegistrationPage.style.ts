@@ -1,4 +1,4 @@
-import styled, { css } from 'styled-components';
+import styled, { css } from "styled-components";
 
 export const StyleRegistrationPage = styled.div<{ isNightMode: boolean }>`
   min-height: 100vh;
@@ -21,8 +21,9 @@ export const StyleRegistrationPage = styled.div<{ isNightMode: boolean }>`
       : css`
           background-color: #f5f5f5;
           color: #0d0d0d;
-          background-image: url('https://cache.marriott.com/is/image/marriotts7prod/50543735-gettyimages-528725265:Wide-Hor?wid=2880&fit=constrain');
-        `}
+          background-image: url('/centraPark.png');
+
+        `} 
 `;
 
 export const ThemeToggleButton = styled.button`

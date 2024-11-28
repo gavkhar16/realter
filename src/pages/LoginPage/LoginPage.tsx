@@ -1,14 +1,15 @@
 import React, { useState } from "react";
-import { Button } from "../../components/UI/Button/ButtonBox";
 import * as yup from "yup";
-import { Heading } from "../../components/UI/Heading/Heading";
-import { Input } from "../../components/UI/Input/InputText";
 import { StyleLoginPage } from "./LogiPage.style";
+import { Input } from "../../components/UI/Input/InputText";
+import { Heading } from "../../components/UI/Heading/Heading";
+import { Button } from "../../components/UI/Button/ButtonBox";
 import { TextBackgroundBox } from "../../components/UI/TextBackgroundBox/TextBackgroundBox";
 import { Linktext } from "../../components/UI/Linktext/Linktext";
+import { useNavigate } from "react-router-dom";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { useNavigate } from "react-router-dom";
+import { Header } from "../../components/Card/Header/Header";
 
 interface ILoginForm {
   useremail: string;
@@ -27,8 +28,9 @@ const loginFormScheme = yup.object({
 });
 
 export const LoginPage = () => {
+  const [isNightMode, setIsNightMode] = useState(true);
   const navigate = useNavigate();
-  const [loginError, setLoginError] = useState<string | null>(null); // Для отображения ошибок
+  const [loginError, setLoginError] = useState<string | null>(null);
 
   const {
     control,
@@ -52,8 +54,7 @@ export const LoginPage = () => {
         parsedUser.useremail === data.useremail &&
         parsedUser.userpassword === data.userpassword
       ) {
-        setLoginError(null); // Сброс ошибки
-        console.log("Вход выполнен");
+        setLoginError(null);
         navigate("/main-page");
       } else {
         setLoginError("Неправильный email или пароль");
@@ -63,15 +64,12 @@ export const LoginPage = () => {
     }
   };
 
-  const handleLinkClick = () => {
-    navigate("/registration-page");
-  };
-
   return (
-    <StyleLoginPage>
+    <StyleLoginPage isNightMode={isNightMode}>
+      <Header isNightMode={isNightMode} setIsNightMode={setIsNightMode} />
       <TextBackgroundBox>
-        <Heading headingText="Авторизация" headingType="h1" />
-        <form onSubmit={handleSubmit(onLoginSubmit)} action="#">
+        <Heading headingText="Авторизация" isNightMode={isNightMode} />
+        <form onSubmit={handleSubmit(onLoginSubmit)}>
           <Controller
             name="useremail"
             control={control}
@@ -81,6 +79,7 @@ export const LoginPage = () => {
                 placeholder="Введите свою электронную почту"
                 errorText={errors.useremail?.message}
                 isError={!!errors.useremail}
+                isNightMode={isNightMode}
                 {...field}
               />
             )}
@@ -94,13 +93,18 @@ export const LoginPage = () => {
                 placeholder="Введите свой пароль"
                 errorText={errors.userpassword?.message}
                 isError={!!errors.userpassword}
+                isNightMode={isNightMode}
                 {...field}
               />
             )}
           />
-          {loginError && <p style={{ color: "red" }}>{loginError}</p>}
-          <Linktext linkText="Зарегистрироватся" onLinkClick={handleLinkClick} />
-          <Button buttonText="Войти" type="submit" isPrimary />
+          {loginError && <p style={{ color: isNightMode ? "red" : "darkred" }}>{loginError}</p>}
+          <Linktext
+            linkText="Зарегистрироваться"
+            onLinkClick={() => navigate("/registration-page")}
+            isNightMode={isNightMode}
+          />
+          <Button buttonText="Войти" type="submit" isPrimary isNightMode={isNightMode} />
         </form>
       </TextBackgroundBox>
     </StyleLoginPage>

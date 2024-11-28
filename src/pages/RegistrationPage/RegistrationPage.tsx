@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import * as yup from "yup";
 import {
   StyleRegistrationPage,
-  ThemeToggleButton,
 } from "./RegistrationPage.style";
 import { Input } from "../../components/UI/Input/InputText";
 import { Heading } from "../../components/UI/Heading/Heading";
@@ -12,6 +11,7 @@ import { Linktext } from "../../components/UI/Linktext/Linktext";
 import { useNavigate } from "react-router-dom";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { Header } from "../../components/Card/Header/Header";
 
 interface IRegistrationPage {
   useremail: string;
@@ -52,20 +52,13 @@ export const RegistrationPage: React.FC = () => {
   });
 
   const onRegistrationSubmit: SubmitHandler<IRegistrationPage> = (data) => {
-    console.log("Регистрация завершена:", data);
-
-    // Сохранение данных в localStorage
     localStorage.setItem("userData", JSON.stringify(data));
-
-    navigate("/"); // Перенаправление на главную страницу
-  };
-
-  const toggleTheme = () => {
-    setIsNightMode(!isNightMode);
+    navigate("/"); // Перенаправление на страницу входа
   };
 
   return (
     <StyleRegistrationPage isNightMode={isNightMode}>
+      <Header isNightMode={isNightMode} setIsNightMode={setIsNightMode} />
       <TextBackgroundBox>
         <Heading headingText="Регистрация" isNightMode={isNightMode} />
         <form onSubmit={handleSubmit(onRegistrationSubmit)}>
@@ -78,6 +71,7 @@ export const RegistrationPage: React.FC = () => {
                 placeholder="Введите свою электронную почту"
                 errorText={errors.useremail?.message}
                 isError={!!errors.useremail}
+                isNightMode={isNightMode}
                 {...field}
               />
             )}
@@ -88,9 +82,10 @@ export const RegistrationPage: React.FC = () => {
             render={({ field }) => (
               <Input
                 type="tel"
-                placeholder="Номер телефона"
+                placeholder="Введите номер телефона"
                 errorText={errors.userphone?.message}
                 isError={!!errors.userphone}
+                isNightMode={isNightMode}
                 {...field}
               />
             )}
@@ -104,28 +99,20 @@ export const RegistrationPage: React.FC = () => {
                 placeholder="Введите свой пароль"
                 errorText={errors.userpassword?.message}
                 isError={!!errors.userpassword}
+                isNightMode={isNightMode}
                 {...field}
               />
             )}
           />
           <Linktext
-            linkText="Уже есть аккаунт"
+            linkText="Уже есть аккаунт?"
+            onLinkClick={() => navigate("/")}
             isNightMode={isNightMode}
-            onLinkClick={() => navigate("/")} 
           />
-          <Button
-            buttonText="Зарегистрироваться"
-            isNightMode={isNightMode}
-            isPrimary
-            type="submit"
-          />
+          <Button buttonText="Зарегистрироваться" type="submit" isPrimary isNightMode={isNightMode} />
         </form>
-        <ThemeToggleButton onClick={toggleTheme}>
-          {isNightMode
-            ? "Переключить на дневной режим"
-            : "Переключить на ночной режим"}
-        </ThemeToggleButton>
       </TextBackgroundBox>
     </StyleRegistrationPage>
   );
 };
+

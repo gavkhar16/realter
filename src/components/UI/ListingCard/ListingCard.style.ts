@@ -77,4 +77,39 @@ export const Photo = styled.img`
 export const ErrorText = styled.p`
   color: red;
   font-size: 12px;
+  
 `;
+export const PaginationContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  margin: 20px 0;
+`;
+
+
+export const PaginationButton = styled.button<{ isActive?: boolean }>`
+  margin: 0 5px;
+  padding: 10px;
+  border: none;
+  cursor: pointer;
+  background-color: ${({ isActive }) => (isActive ? "#D5D5D5" : "#4D4D4D")};
+  color: ${({ isActive }) => (isActive ? "#fff" : "#000")};
+  border-radius: 4px;
+
+  &:disabled {
+    cursor: not-allowed;
+    opacity: 0.6;
+  }
+`;
+
+export const Loader = styled.div`
+/* HTML: <div class="loader"></div> */
+.loader {
+  width: 120px;
+  height: 20px;
+  -webkit-mask: radial-gradient(circle closest-side,#000 94%,#0000) left/20% 100%;
+  background: linear-gradient(#000 0 0) left/0% 100% no-repeat #ddd;
+  animation: l17 2s infinite steps(6);
+}
+@keyframes l17 {
+    100% {background-size:120% 100%}
+}`
