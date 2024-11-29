@@ -18,11 +18,16 @@ padding: 1.5rem;
 border-radius: 10px;
 box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.6);
 transition: transform 0.3s, box-shadow 0.3s;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
 
-&:hover {
-  transform: scale(1.05);
-  box-shadow: 0px 0px 20px rgba(255, 215, 0, 0.6);
-}
+  &:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  }
+
+
+
 `;
 
 export const ListingImage = styled.img`

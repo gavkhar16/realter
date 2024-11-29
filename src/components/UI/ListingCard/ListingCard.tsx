@@ -27,14 +27,16 @@ export const ListingCard: React.FC = () => {
   const itemsPerPage = 5;
 
   const fetchApartmentData = async () => {
-    const url = 'https://bayut.p.rapidapi.com/auto-complete?query=abu%20dhabi&hitsPerPage=25&page=0&lang=en';
-const options = {
-	method: 'GET',
-	headers: {
-		'x-rapidapi-key': 'd4402c0024mshda7bbc52c603153p19062djsna8067e4643ff',
-		'x-rapidapi-host': 'bayut.p.rapidapi.com'
-	}
-};
+    const url =
+      "https://bayut.p.rapidapi.com/properties/list?locationExternalIDs=5002&purpose=for-rent&page=1&lang=en";
+    const options = {
+      method: "GET",
+      headers: {
+        "x-rapidapi-key": "32bf5ec321msh22e924d35442ec2p143c8djsn5be6851d36d7",
+        "x-rapidapi-host": "bayut.p.rapidapi.com",
+      },
+    };
+
 
     try {
       setLoading(true);
@@ -100,7 +102,7 @@ const options = {
         {currentApartments.map((apartment) => (
           <ListingCardContainer key={apartment.id}>
             <ListingTitle>{apartment.title}</ListingTitle>
-            <ListingPrice>price: {apartment.price}</ListingPrice>
+            <ListingPrice>price {apartment.price}</ListingPrice>
             {apartment.coverPhoto ? (
               <ListingImage
                 src={apartment.coverPhoto.url}

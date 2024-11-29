@@ -10,7 +10,6 @@ import {
 } from "./CardPage.style";
 
 interface ApartmentDetails {
-  id: string;
   title: string;
   price: string;
   location: string;
@@ -28,34 +27,31 @@ export const CardPage: React.FC = () => {
     const fetchApartmentDetails = async () => {
       try {
         setLoading(true);
+        const response = await fetch(
+          `https://bayut.p.rapidapi.com/properties/detail?externalID=${id}`,
+          {
+            method: "GET",
+            headers: {
+              "x-rapidapi-key": "32bf56ec321msh22e924d35442ec2p143c8djsn5be6851d36d7",
+              "x-rapidapi-host": "bayut.p.rapidapi.com",
+            },
+          }
+        );
 
-        // Настроить запрос на API с использованием ID
-        const url = `https://bayut.p.rapidapi.com/properties/detail?externalID=${id}`;
-        const options = {
-          method: "GET",
-          headers: {
-            "x-rapidapi-key": "32bf56ec321msh22e924d35442ec2p143c8djsn5be6851d36d7",
-            "x-rapidapi-host": "bayut.p.rapidapi.com",
-          },
-        };
-
-        const response = await fetch(url, options);
-        const data = await response.json();
-
-        if (response.ok) {
-          setApartment({
-            id: data.id,
-            title: data.title || "Название не указано",
-            price: data.price || "Цена не указана",
-            location: data.location || "Местоположение не указано",
-            area: data.area || "Площадь не указана",
-            image: data.coverPhoto?.url || "https://via.placeholder.com/600",
-          });
-        } else {
-          throw new Error("Ошибка при загрузке данных");
+        if (!response.ok) {
+          throw new Error("Failed to fetch details");
         }
+
+        const data = await response.json();
+        setApartment({
+          title: data.title || "Без названия",
+          price: data.price || "Цена не указана",
+          location: data.location?.[0]?.name || "Местоположение не указано",
+          area: data.area || "Площадь не указана",
+          image: data.coverPhoto?.url || "https://via.placeholder.com/600",
+        });
       } catch (err: any) {
-        setError(err.message || "Не удалось загрузить данные");
+        setError(err.message || "Ошибка загрузки данных");
       } finally {
         setLoading(false);
       }
