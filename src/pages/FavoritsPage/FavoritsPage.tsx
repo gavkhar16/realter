@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from "react";
 import {
-  ListingCardContainer,
-  ListingImage,
-  ListingTitle,
-  ListingPrice,
-  ErrorText,
-} from "../../components/UI/ListingCard/ListingCard.style";
-
+  FavoritesContainer,
+  NeonBorder,
+  FavoritesTitle,
+  FavoritesList,
+  FavoriteCard,
+  EmptyMessage,
+} from "./FavoritsPage.style";
+import { ListingCard } from "../../components/UI/ListingCard/ListingCard";
 interface Apartment {
   id: string;
   title: string;
@@ -24,28 +25,36 @@ export const FavoritesPage: React.FC = () => {
     }
   }, []);
 
+  const removeFavorite = (id: string) => {
+    const updatedFavorites = favorites.filter(
+      (apartment) => apartment.id !== id
+    );
+    setFavorites(updatedFavorites);
+    localStorage.setItem("favorites", JSON.stringify(updatedFavorites));
+  };
+
   if (favorites.length === 0) {
-    return <ErrorText>Нет объектов в избранном.</ErrorText>;
+    return (
+      <FavoritesContainer>
+        <NeonBorder />
+        <FavoritesTitle>Избранное</FavoritesTitle>
+        <EmptyMessage>Нет объектов в избранном.</EmptyMessage>
+      </FavoritesContainer>
+    );
   }
 
   return (
-    <div>
-      {favorites.map((apartment) => (
-        <ListingCardContainer key={apartment.id}>
-          <div style={{ marginBottom: "15px" }}>
-            {apartment.coverPhoto ? (
-              <ListingImage
-                src={apartment.coverPhoto.url}
-                alt={apartment.coverPhoto.title || "Изображение"}
-              />
-            ) : (
-              <ErrorText>Фото отсутствует</ErrorText>
-            )}
-          </div>
-          <ListingTitle>{apartment.title}</ListingTitle>
-          <ListingPrice>{apartment.price} AED</ListingPrice>
-        </ListingCardContainer>
-      ))}
-    </div>
+    <FavoritesContainer>
+      <NeonBorder />
+      <FavoritesTitle>Избранное</FavoritesTitle>
+      <FavoritesList>
+        {favorites.map((apartment) => (
+          <FavoriteCard >
+            <ListingCard/>
+          </FavoriteCard>
+          
+        ))}
+      </FavoritesList>
+    </FavoritesContainer>
   );
 };

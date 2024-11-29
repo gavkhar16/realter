@@ -7,7 +7,7 @@ export const StyleHeader = styled.header`
   left: 0;
   z-index: 100;
   padding: calc(1vw + 6.4px) calc(12vw - 35px);
-  background-color: ${({ theme }) => theme.colors.black};
+  background-color: ${({ theme }) => theme.colors.lightgray};
   color: ${({ theme }) => theme.colors.white};
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 
@@ -16,8 +16,34 @@ export const StyleHeader = styled.header`
   justify-content: space-between;
 `;
 
+export const Logo = styled.div`
+  font-size: 24px;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+
+  a {
+    text-decoration: none;
+    color: ${({ theme }) => theme.colors.white};
+    font-family: "Courier New", Courier, monospace;
+    display: flex;
+    align-items: center;
+
+    img {
+      width: 40px; /* Размер картинки */
+      height: 40px;
+      margin-right: 10px; /* Отступ между картинкой и текстом */
+    }
+
+    &:hover {
+      text-shadow: 0 0 8px ${({ theme }) => theme.colors.primary};
+    }
+  }
+`;
+
+
 export const ThemeToggleButton = styled.button`
-  margin-right: 20px;
+  margin-left: 20px;
   background: none;
   border: none;
   cursor: pointer;
@@ -26,46 +52,9 @@ export const ThemeToggleButton = styled.button`
     width: 24px;
     height: 24px;
   }
-`;
 
-export const Logo = styled.div`
-  font-size: 24px;
-  font-weight: bold;
-
-  a {
-    text-decoration: none;
-    color: ${({ theme }) => theme.text};
-  }
-`;
-
-export const SearchBaro = styled.div`
-  display: flex;
-  align-items: center;
-  flex: 1;
-  margin: 0 20px;
-  max-width: 500px;
-
-  input {
-    flex: 1;
-    padding: 10px;
-    border: 1px solid ${({ theme }) => theme.border};
-    border-radius: 4px 0 0 4px;
-    background-color: ${({ theme }) => theme.inputBackground};
-    color: ${({ theme }) => theme.text};
-
-    &::placeholder {
-      color: ${({ theme }) => theme.placeholder};
-    }
-  }
-
-  img {
-    width: 20px;
-    height: 20px;
-    padding: 5px;
-    background-color: ${({ theme }) => theme.inputBackground};
-    border: 1px solid ${({ theme }) => theme.border};
-    border-left: none;
-    border-radius: 0 4px 4px 0;
+  &:hover {
+    transform: scale(1.1);
   }
 `;
 
@@ -74,12 +63,13 @@ export const FavoritesButton = styled.div`
     text-decoration: none;
     padding: 10px 15px;
     border-radius: 4px;
-    background-color: ${({ theme }) => theme.buttonBackground};
-    color: ${({ theme }) => theme.text};
+    background-color: ${({ theme }) => theme.colors};
+    color: ${({ theme }) => theme.colors.white};
     font-weight: bold;
+    transition: background-color 0.3s ease;
 
     &:hover {
-      background-color: ${({ theme }) => theme.buttonHoverBackground};
+      background-color: ${({ theme }) => theme.colors.primary};
     }
   }
 `;

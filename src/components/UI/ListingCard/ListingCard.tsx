@@ -21,10 +21,20 @@ interface Apartment {
 
 export const ListingCard: React.FC = () => {
   const [apartments, setApartments] = useState<Apartment[]>([]);
+  const [favorites, setFavorites] = useState<string[]>(() => {
+    // Инициализация из localStorage
+    const savedFavorites = localStorage.getItem("favorites");
+    return savedFavorites ? JSON.parse(savedFavorites) : [];
+  });
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const itemsPerPage = 5;
+
+  // Сохранение избранного в localStorage при изменении
+  useEffect(() => {
+    localStorage.setItem("favorites", JSON.stringify(favorites));
+  }, [favorites]);
 
   const fetchApartmentData = async () => {
     const url =
@@ -78,6 +88,16 @@ export const ListingCard: React.FC = () => {
     }
   };
 
+  const toggleFavorite = (id: string) => {
+    setFavorites((prevFavorites) =>
+      prevFavorites.includes(id)
+        ? prevFavorites.filter((favId) => favId !== id) // Удалить из избранного
+        : [...prevFavorites, id] // Добавить в избранное
+    );
+  };
+
+  const isFavorite = (id: string) => favorites.includes(id);
+
   if (loading) {
     return (
       <Loader>
@@ -112,8 +132,11 @@ export const ListingCard: React.FC = () => {
             <ListingTitle>{apartment.title}</ListingTitle>
             <ListingPrice>{apartment.price} AED</ListingPrice>
             <div style={{ marginBottom: "20px" }}>
-              <FavoriteButton isFavorite={false}>
-                Добавить в избранное
+              <FavoriteButton
+                isFavorite={isFavorite(apartment.id)}
+                onClick={() => toggleFavorite(apartment.id)}
+              >
+                {isFavorite(apartment.id) ? "Удалить из избранного" : "Добавить в избранное"}
               </FavoriteButton>
             </div>
           </ListingCardContainer>
