@@ -5,7 +5,7 @@ import {
   ListingImage,
   ListingTitle,
   ListingPrice,
-  LikeButton,
+  FavoriteButton,
   ErrorText,
   PaginationContainer,
   PaginationButton,
@@ -37,14 +37,12 @@ export const ListingCard: React.FC = () => {
       },
     };
 
-
     try {
       setLoading(true);
       const response = await fetch(url, options);
       const data = await response.json();
 
       if (response.ok) {
-        // Проверка структуры ответа API
         setApartments(
           data.hits.map((hit: any) => ({
             id: hit.id,
@@ -101,17 +99,23 @@ export const ListingCard: React.FC = () => {
       <ListingsContainer>
         {currentApartments.map((apartment) => (
           <ListingCardContainer key={apartment.id}>
+            <div style={{ marginBottom: "15px" }}>
+              {apartment.coverPhoto ? (
+                <ListingImage
+                  src={apartment.coverPhoto.url}
+                  alt={apartment.coverPhoto.title || "Изображение"}
+                />
+              ) : (
+                <ErrorText>Фото отсутствует</ErrorText>
+              )}
+            </div>
             <ListingTitle>{apartment.title}</ListingTitle>
-            <ListingPrice>price {apartment.price}</ListingPrice>
-            {apartment.coverPhoto ? (
-              <ListingImage
-                src={apartment.coverPhoto.url}
-                alt={apartment.coverPhoto.title || "Изображение"}
-              />
-            ) : (
-              <ErrorText>Фото отсутствует</ErrorText>
-            )}
-            <LikeButton>♡ Добавить в избранное</LikeButton>
+            <ListingPrice>{apartment.price} AED</ListingPrice>
+            <div style={{ marginBottom: "20px" }}>
+              <FavoriteButton isFavorite={false}>
+                Добавить в избранное
+              </FavoriteButton>
+            </div>
           </ListingCardContainer>
         ))}
       </ListingsContainer>

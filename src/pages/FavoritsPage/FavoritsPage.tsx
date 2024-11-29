@@ -1,32 +1,51 @@
-import React, { useContext } from 'react';
+import React, { useEffect, useState } from "react";
 import {
-  FavoritesContainer,
-  FavoritesList,
-  EmptyMessage,
-} from './FavoritsPage.style';
-import Heading from '../../components/UI/Heading/Heading';
+  ListingCardContainer,
+  ListingImage,
+  ListingTitle,
+  ListingPrice,
+  ErrorText,
+} from "../../components/UI/ListingCard/ListingCard.style";
 
-const FavoritesPage: React.FC = () => {
-  const favorites = JSON.parse(localStorage.getItem('favorites') || '[]');
+interface Apartment {
+  id: string;
+  title: string;
+  price: string;
+  coverPhoto?: { url: string; title?: string };
+}
+
+export const FavoritesPage: React.FC = () => {
+  const [favorites, setFavorites] = useState<Apartment[]>([]);
+
+  useEffect(() => {
+    const savedFavorites = localStorage.getItem("favorites");
+    if (savedFavorites) {
+      setFavorites(JSON.parse(savedFavorites));
+    }
+  }, []);
+
+  if (favorites.length === 0) {
+    return <ErrorText>Нет объектов в избранном.</ErrorText>;
+  }
 
   return (
-    <FavoritesContainer>
-      <Heading headingType="h1" headingText="Избранное" />
-      <FavoritesList>
-        {favorites.length > 0 ? (
-          favorites.map((favorite: any, index: number) => (
-            <div key={index}>
-              <h3>{favorite.title}</h3>
-              <p>{favorite.price}</p>
-              <img src={favorite.image} alt={favorite.title} />
-            </div>
-          ))
-        ) : (
-          <EmptyMessage>✨ Вы пока ничего не добавили в избранное. ✨</EmptyMessage>
-        )}
-      </FavoritesList>
-    </FavoritesContainer>
+    <div>
+      {favorites.map((apartment) => (
+        <ListingCardContainer key={apartment.id}>
+          <div style={{ marginBottom: "15px" }}>
+            {apartment.coverPhoto ? (
+              <ListingImage
+                src={apartment.coverPhoto.url}
+                alt={apartment.coverPhoto.title || "Изображение"}
+              />
+            ) : (
+              <ErrorText>Фото отсутствует</ErrorText>
+            )}
+          </div>
+          <ListingTitle>{apartment.title}</ListingTitle>
+          <ListingPrice>{apartment.price} AED</ListingPrice>
+        </ListingCardContainer>
+      ))}
+    </div>
   );
 };
-
-export default FavoritesPage;

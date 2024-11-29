@@ -1,120 +1,138 @@
-import styled from 'styled-components';
+import styled from "styled-components";
 
 export const ListingsContainer = styled.div`
-display: flex;
-flex-wrap: wrap;
-gap: 1.5rem;
-justify-content: center;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 20px;
+  margin-top: 40px;
 `;
 
 export const ListingCardContainer = styled.div`
-background-color: #1a1a1a;
-color: #f0f0f0;
-display: flex;
-flex-wrap: wrap;
-justify-content: center;
-width: 300px;
-padding: 1.5rem;
-border-radius: 10px;
-box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.6);
-transition: transform 0.3s, box-shadow 0.3s;
-  cursor: pointer;
-  transition: transform 0.2s, box-shadow 0.2s;
+background: #000; /* Черный фон */
+  border-radius: 10px;
+  border: 1px solid #ddd;
+  padding: 20px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease-in-out;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 
   &:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    transform: scale(1.05);
   }
-
-
-
 `;
 
 export const ListingImage = styled.img`
-width: 100%;
-height: 200px;
-border-radius: 8px;
-object-fit: cover;
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+  margin-bottom: 15px;
 `;
 
-export const ListingTitle = styled.h2`
-font-size: 1.5rem;
-margin: 1rem 0;
-color: #f8f8f8;
+export const ListingTitle = styled.h3`
+  font-size: 18px;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 10px;
+  text-align: center;
 `;
 
 export const ListingPrice = styled.p`
-font-size: 1.2rem;
-color: #d4af37;
-font-weight: bold;
+  font-size: 16px;
+  color: #555;
+  margin-bottom: 15px;
+  text-align: center;
 `;
-export const LikeButton = styled.button`
-  background-color: #ff4d4f; /* Красный цвет для кнопки */
-  color: white;
-  border: none;
+
+export const FavoriteButton = styled.button<{ isFavorite: boolean }>`
+  background-color: ${({ isFavorite }) => (isFavorite ? "#FF4040" : "#fff")};
+  color: ${({ isFavorite }) => (isFavorite ? "#fff" : "#FF4040")};
+  border: 2px solid #FF4040;
+  border-radius: 50px;
+  padding: 10px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 20px;
+
+  &::before {
+    content: "♡"; /* Сердечко */
+    font-size: 20px;
+    margin-right: 8px;
+  }
+
+  &:hover {
+    transform: scale(1.1);
+    background-color: ${({ isFavorite }) => (isFavorite ? "#FF5757" : "#fff")};
+    color: #fff;
+  }
+
+  &:focus {
+    outline: none;
+  }
+`;
+
+export const ErrorText = styled.p`
+  color: #e74c3c;
+  font-size: 16px;
+  text-align: center;
+  margin-top: 20px;
+`;
+
+export const PaginationContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 30px;
+`;
+
+export const PaginationButton = styled.button<{ isActive?: boolean }>`
+  background-color: ${({ isActive }) => (isActive ? "#00FFCC" : "#fff")};
+  color: ${({ isActive }) => (isActive ? "#fff" : "#333")};
+  border: 1px solid #ddd;
+  padding: 8px 15px;
   border-radius: 5px;
-  padding: 8px 16px;
   font-size: 14px;
   cursor: pointer;
   transition: background-color 0.3s ease;
 
   &:hover {
-    background-color: #e84142; /* Цвет при наведении */
+    background-color: #00ffcc;
+    color: #fff;
   }
 
-  &:active {
-    background-color: #c73133; /* Цвет при нажатии */
+  &:focus {
+    outline: none;
   }
-`;
-export const PhotoGallery = styled.div`
-  display: flex;
-  gap: 10px;
-  flex-wrap: wrap;
-`;
-
-export const Photo = styled.img`
-  width: 100px;
-  height: 100px;
-  object-fit: cover;
-  border-radius: 8px;
-`;
-
-export const ErrorText = styled.p`
-  color: red;
-  font-size: 12px;
-  
-`;
-export const PaginationContainer = styled.div`
-  display: flex;
-  justify-content: center;
-  margin: 20px 0;
-`;
-
-
-export const PaginationButton = styled.button<{ isActive?: boolean }>`
-  margin: 0 5px;
-  padding: 10px;
-  border: none;
-  cursor: pointer;
-  background-color: ${({ isActive }) => (isActive ? "#D5D5D5" : "#4D4D4D")};
-  color: ${({ isActive }) => (isActive ? "#fff" : "#000")};
-  border-radius: 4px;
 
   &:disabled {
     cursor: not-allowed;
-    opacity: 0.6;
+    background-color: #f1f1f1;
+    color: #aaa;
   }
 `;
 
 export const Loader = styled.div`
-/* HTML: <div class="loader"></div> */
-.loader {
-  width: 120px;
-  height: 20px;
-  -webkit-mask: radial-gradient(circle closest-side,#000 94%,#0000) left/20% 100%;
-  background: linear-gradient(#000 0 0) left/0% 100% no-repeat #ddd;
-  animation: l17 2s infinite steps(6);
-}
-@keyframes l17 {
-    100% {background-size:120% 100%}
-}`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 200px;
+
+  .loader {
+    border: 5px solid #f3f3f3;
+    border-top: 5px solid #00ffcc;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    animation: spin 1s linear infinite;
+  }
+
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+`;
